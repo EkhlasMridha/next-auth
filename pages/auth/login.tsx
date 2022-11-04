@@ -1,4 +1,4 @@
-import { signIn } from "next-auth/react";
+import { getCsrfToken, signIn } from "next-auth/react";
 import Head from "next/head";
 import { useState } from "react";
 
@@ -86,5 +86,13 @@ const LogIn = (props: any) => {
     </>
   );
 };
+
+// export async function getServerSideProps(context: any) {
+//   return {
+//     props: {
+//       csrfToken: getCsrfToken(context),
+//     },
+//   };
+// }
 
 export default LogIn;
