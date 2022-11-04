@@ -1,14 +1,14 @@
-import NextAuth from "next-auth";
-import CredentialsProviders from "next-auth/providers/credentials";
+import NextAuth from 'next-auth';
+import CredentialsProviders from 'next-auth/providers/credentials';
 
 export default NextAuth({
   callbacks: {
-    async signIn({ user, account }) {
-      console.log(user);
-      if (account?.provider === "credentials") return true;
+    // async signIn({ user, account }) {
+    //   console.log(user);
+    //   if (account?.provider === 'credentials') return true;
 
-      return false;
-    },
+    //   return false;
+    // },
     async session({ token, session, user }) {
       if (user) {
         (session.user as any).id = user.id;
@@ -25,28 +25,26 @@ export default NextAuth({
       return token;
     },
   },
-  pages: {
-    signIn: "/auth/login",
-  },
+
   session: {
-    strategy: "jwt",
+    strategy: 'jwt',
   },
   providers: [
     CredentialsProviders({
-      name: "credentials",
+      name: 'credentials',
       credentials: {
-        username: { label: "Username", type: "text", placeholder: "username" },
-        password: { label: "Password", type: "password" },
+        username: { label: 'Username', type: 'text', placeholder: 'username' },
+        password: { label: 'Password', type: 'password' },
       },
       async authorize(credentials, req) {
         let payload = {
           username: credentials?.username,
           password: credentials?.password,
         };
-        const res = await fetch("http://localhost:3000/api/login", {
-          method: "POST",
+        const res = await fetch('http://localhost:3000/api/login', {
+          method: 'POST',
           body: JSON.stringify(payload),
-          headers: { "Content-Type": "application/json" },
+          headers: { 'Content-Type': 'application/json' },
         });
 
         const token = await res.json();
