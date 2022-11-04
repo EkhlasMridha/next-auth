@@ -4,7 +4,7 @@ import CredentialsProviders from "next-auth/providers/credentials";
 export default NextAuth({
   callbacks: {
     async signIn({ user, account }) {
-      if (account?.provider === 'credentials') return true;
+      if (account?.provider === "credentials") return true;
 
       return false;
     },
@@ -22,9 +22,6 @@ export default NextAuth({
   secret: "jwt-secret",
   session: {
     strategy: "jwt",
-  },
-  pages: {
-    signIn: '/auth/login',
   },
   providers: [
     CredentialsProviders({
