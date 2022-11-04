@@ -39,6 +39,8 @@ const Notes = (props: any) => {
     e.preventDefault();
 
     console.log(value);
+    if ((value ?? "") === "") return;
+
     setNote((pre) => {
       let id = pre.length + 1;
       let data: NoteProps = {
