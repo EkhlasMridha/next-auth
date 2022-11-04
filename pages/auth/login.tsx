@@ -1,5 +1,6 @@
-import { getCsrfToken, signIn } from "next-auth/react";
+import { signIn } from "next-auth/react";
 import Head from "next/head";
+import { useRouter } from "next/router";
 import { useState } from "react";
 
 type FormValueType = {
@@ -9,6 +10,7 @@ type FormValueType = {
 
 const LogIn = (props: any) => {
   const [value, setValue] = useState<FormValueType>();
+  const router = useRouter();
 
   const onChangeFormValue = (e: any) => {
     let propName = e.target?.name;
@@ -28,8 +30,10 @@ const LogIn = (props: any) => {
       redirect: false,
       ...value,
     };
-    const result = await signIn("credentials", config);
-    console.log(result);
+    const result = await signIn("credentials", { ...config, callbackUrl: "/" });
+    if (result?.status === 200 && result?.ok) {
+      router.push("/");
+    }
   };
 
   return (
@@ -42,6 +46,7 @@ const LogIn = (props: any) => {
       <form
         onSubmit={handleSubmit}
         className="space-y-8 flex flex-col p-4 border rounded-md ml-auto mr-auto"
+        method="POST"
       >
         <div className="flex flex-col space-y-5">
           <div className="col-span-6">

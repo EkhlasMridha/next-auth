@@ -1,9 +1,10 @@
-import { signIn, signOut } from 'next-auth/react';
+import { signIn, signOut, useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 
 export const Header = (props: any) => {
   const router = useRouter();
+  const { data: session } = useSession();
 
   const goToHome = () => {
     router.push('/');
@@ -18,21 +19,28 @@ export const Header = (props: any) => {
           Notebook
         </div>
         <div className='flex'>
-          <Link href={'notes'}>
+          <Link href={'/notes'}>
             <div className='cursor-pointer hover:bg-sky-700 hover:text-white active:bg-sky-900 flex'>
               <span className='mt-auto mb-auto px-4'>Notes</span>
             </div>
           </Link>
-          <div className='cursor-pointer hover:bg-sky-700 hover:text-white active:bg-sky-900 flex'>
-            <span className='mt-auto mb-auto px-4' onClick={() => signIn()}>
-              SignIn
-            </span>
-          </div>
-          <div className='cursor-pointer hover:bg-sky-700 active:bg-sky-900 hover:text-white flex'>
-            <span className='mt-auto mb-auto px-4' onClick={() => signOut()}>
-              SignOut
-            </span>
-          </div>
+          {!session ? (
+            <div
+              className='cursor-pointer hover:bg-sky-700 hover:text-white active:bg-sky-900 flex'
+              onClick={() => router.push('/auth/login')}
+            >
+              <span className='mt-auto mb-auto px-4'>SignIn</span>
+            </div>
+          ) : (
+            <div className='cursor-pointer hover:bg-sky-700 active:bg-sky-900 hover:text-white flex'>
+              <span
+                className='mt-auto mb-auto px-4'
+                onClick={() => signOut({ callbackUrl: '/auth/login' })}
+              >
+                SignOut
+              </span>
+            </div>
+          )}
         </div>
       </div>
     </header>

@@ -3,25 +3,16 @@ import CredentialsProviders from "next-auth/providers/credentials";
 
 export default NextAuth({
   callbacks: {
-    // async signIn({ user, account }) {
-    //   console.log(user);
-    //   if (account?.provider === 'credentials') return true;
+    async signIn({ user, account }) {
+      if (account?.provider === 'credentials') return true;
 
-    //   return false;
-    // },
-    async session({ token, session, user }) {
-      if (user) {
-        (session.user as any).id = user.id;
-        (session as any).accessToken = token.accessToken;
-      }
+      return false;
+    },
+
+    async session({ session, user, token }) {
       return session;
     },
-    async jwt({ token, account, user }) {
-      // Persist the OAuth access_token and or the user id to the token right after signin
-      if (account) {
-        token.accessToken = (user as any).token;
-      }
-      console.log(token, user);
+    async jwt({ token, user, account, profile, isNewUser }) {
       return token;
     },
   },
@@ -31,6 +22,9 @@ export default NextAuth({
   secret: "jwt-secret",
   session: {
     strategy: "jwt",
+  },
+  pages: {
+    signIn: '/auth/login',
   },
   providers: [
     CredentialsProviders({
