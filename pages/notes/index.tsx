@@ -1,9 +1,8 @@
-import { unstable_getServerSession } from "next-auth";
+import { useQuery } from "@tanstack/react-query";
 import Head from "next/head";
-import { useState } from "react";
+import { ChangeEvent, FormEvent, useState } from "react";
 import { Note } from "../../Components/note";
 import styles from "../../styles/Home.module.css";
-import { authOptions } from "../api/auth/[...nextauth]";
 
 interface NoteProps {
   id: number;
@@ -26,7 +25,9 @@ const Notes = (props: any) => {
     },
   ]);
 
-  const onChangeFormValue = (e: any) => {
+  const onChangeFormValue = (
+    e: ChangeEvent<HTMLInputElement & HTMLTextAreaElement>
+  ) => {
     let propName = e.target?.name;
     setValue((pre: any) => {
       let newValue = {
@@ -37,7 +38,18 @@ const Notes = (props: any) => {
     });
   };
 
-  const onSubmit = (e: any) => {
+  const { data, isLoading, error } = useQuery({
+    queryKey: ["todoList"],
+    queryFn: getTodos,
+  });
+
+  function getTodos() {
+    return fetch("https://jsonplaceholder.typicode.com/todos/1").then((r) =>
+      r.json()
+    );
+  }
+
+  const onSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     console.log(value);
@@ -62,6 +74,7 @@ const Notes = (props: any) => {
       </Head>
 
       <main className={styles.main}>
+        {isLoading ? <div>Loading...</div> : <h1>{data?.title}</h1>}
         <form onSubmit={onSubmit} className="p-4 border rounded-sm">
           <div className="space-y-5">
             <div className="col-span-6">
@@ -93,10 +106,7 @@ const Notes = (props: any) => {
               />
             </div>
           </div>
-          <button
-            type="submit"
-            className="mt-5 bg-sky-700 rounded pl-4 pr-4 pt-2 pb-2 text-white active:bg-sky-900 place-items-end"
-          >
+          <button type="submit" className="mt-5 app-btn place-items-end">
             Save
           </button>
         </form>

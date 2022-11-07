@@ -1,7 +1,7 @@
 import { signIn } from "next-auth/react";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useState, FormEvent, ChangeEvent } from "react";
 
 type FormValueType = {
   username: string;
@@ -12,8 +12,9 @@ const LogIn = (props: any) => {
   const [value, setValue] = useState<FormValueType>();
   const router = useRouter();
 
-  const onChangeFormValue = (e: any) => {
+  const onChangeFormValue = (e: ChangeEvent<HTMLInputElement>) => {
     let propName = e.target?.name;
+
     setValue((pre: any) => {
       let newValue = {
         ...pre,
@@ -23,7 +24,7 @@ const LogIn = (props: any) => {
     });
   };
 
-  const handleSubmit = async (e: any) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log("Payload ", value);
     const config = {
@@ -80,10 +81,7 @@ const LogIn = (props: any) => {
           </div>
         </div>
         <div className="flex justify-end">
-          <button
-            type="submit"
-            className=" bg-sky-700 rounded pl-4 pr-4 pt-2 pb-2 text-white active:bg-sky-900 place-items-end"
-          >
+          <button type="submit" className="app-btn place-items-end">
             LogIn
           </button>
         </div>
@@ -91,13 +89,5 @@ const LogIn = (props: any) => {
     </>
   );
 };
-
-// export async function getServerSideProps(context: any) {
-//   return {
-//     props: {
-//       csrfToken: getCsrfToken(context),
-//     },
-//   };
-// }
 
 export default LogIn;

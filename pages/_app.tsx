@@ -1,11 +1,10 @@
 import "../styles/globals.css";
 import type { AppProps } from "next/app";
-import { Header } from "../layouts/header";
-import { Footer } from "../layouts/footer";
 import { SessionProvider, useSession } from "next-auth/react";
 import { Layout } from "../layouts/layout";
-import { NextRouter, useRouter } from "next/router";
+import { NextRouter } from "next/router";
 import { useEffect } from "react";
+import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 
 type SessionProps = {
   session: any;
@@ -36,12 +35,16 @@ function MyApp(props: AppProps<NotePageProps>) {
     pageProps: { session, ...pageProps },
   } = props;
 
+  const queryClient = new QueryClient();
+
   return (
     <SessionProvider session={session}>
       <AuthGuard {...props}>
-        <Layout>
-          <Component {...pageProps} />
-        </Layout>
+        <QueryClientProvider client={queryClient}>
+          <Layout>
+            <Component {...pageProps} />
+          </Layout>
+        </QueryClientProvider>
       </AuthGuard>
     </SessionProvider>
   );

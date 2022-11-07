@@ -28,3 +28,9 @@ a {
     background: black;
   }
 }
+
+@layer components {
+  .app-btn {
+    @apply bg-sky-700 rounded pl-4 pr-4 pt-2 pb-2 text-white active:bg-sky-900;
+  }
+}
