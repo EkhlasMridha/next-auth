@@ -1,7 +1,9 @@
+import { unstable_getServerSession } from "next-auth";
 import Head from "next/head";
 import { useState } from "react";
 import { Note } from "../../Components/note";
 import styles from "../../styles/Home.module.css";
+import { authOptions } from "../api/auth/[...nextauth]";
 
 interface NoteProps {
   id: number;
@@ -105,5 +107,15 @@ const Notes = (props: any) => {
     </div>
   );
 };
+
+export async function getServerSideProps(context: any) {
+  console.log("Context ", context);
+
+  return {
+    props: {
+      data: "name",
+    },
+  };
+}
 
 export default Notes;
