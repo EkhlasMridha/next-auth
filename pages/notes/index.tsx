@@ -1,4 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
+import { useSession } from "next-auth/react";
 import Head from "next/head";
 import { ChangeEvent, FormEvent, useState } from "react";
 import { Note } from "../../Components/note";
@@ -25,6 +26,8 @@ const Notes = (props: any) => {
     },
   ]);
 
+  const { data: session } = useSession();
+
   const onChangeFormValue = (
     e: ChangeEvent<HTMLInputElement & HTMLTextAreaElement>
   ) => {
@@ -38,16 +41,16 @@ const Notes = (props: any) => {
     });
   };
 
-  const { data, isLoading, error } = useQuery({
-    queryKey: ["todoList"],
-    queryFn: getTodos,
-  });
+  // const { data, isLoading, error } = useQuery({
+  //   queryKey: ["todoList"],
+  //   queryFn: getTodos,
+  // });
 
-  function getTodos() {
-    return fetch("https://jsonplaceholder.typicode.com/todos/1").then((r) =>
-      r.json()
-    );
-  }
+  // function getTodos() {
+  //   return fetch("https://jsonplaceholder.typicode.com/todos/1").then((r) =>
+  //     r.json()
+  //   );
+  // }
 
   const onSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -74,7 +77,7 @@ const Notes = (props: any) => {
       </Head>
 
       <main className={styles.main}>
-        {isLoading ? <div>Loading...</div> : <h1>{data?.title}</h1>}
+        {/* {isLoading ? <div>Loading...</div> : <h1>{data?.title}</h1>} */}
         <form onSubmit={onSubmit} className="p-4 border rounded-sm">
           <div className="space-y-5">
             <div className="col-span-6">

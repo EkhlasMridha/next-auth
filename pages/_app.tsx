@@ -17,7 +17,6 @@ function AuthGuard(props: any) {
   const { router, children } = props;
 
   useEffect(() => {
-    console.log("Path ", (router as NextRouter).pathname);
     if (
       !["/", "/auth/login"].includes((router as NextRouter).pathname) &&
       !session
@@ -30,15 +29,12 @@ function AuthGuard(props: any) {
 }
 
 function MyApp(props: AppProps<NotePageProps>) {
-  const {
-    Component,
-    pageProps: { session, ...pageProps },
-  } = props;
+  const { Component, pageProps } = props;
 
   const queryClient = new QueryClient();
 
   return (
-    <SessionProvider session={session}>
+    <SessionProvider>
       <AuthGuard {...props}>
         <QueryClientProvider client={queryClient}>
           <Layout>
