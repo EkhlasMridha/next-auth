@@ -1,4 +1,3 @@
-import { useQuery } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import Head from "next/head";
 import { ChangeEvent, FormEvent, useState } from "react";
@@ -25,8 +24,6 @@ const Notes = (props: any) => {
       detail: "Test note detail 2",
     },
   ]);
-
-  const { data: session } = useSession();
 
   const onChangeFormValue = (
     e: ChangeEvent<HTMLInputElement & HTMLTextAreaElement>
